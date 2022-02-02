@@ -1,14 +1,10 @@
 package com.java8.casestudy.case1;
 
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.BiPredicate;
-import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
-import java.util.function.Function;
+
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 import static java.util.stream.Collectors.*;
 
@@ -99,6 +95,7 @@ public class Main {
 		Book b=moreBook.get();
 		System.out.println(b);
 		// We want to know how many pages the longest book has.
+		System.out.println("*****how many pages the longest book has*****");
 		int longestBookPage=allBooks
 				.stream()
 				.max(Comparator.comparing(Book::getPages))
@@ -109,22 +106,53 @@ public class Main {
 		
 	
 		// We want the average number of pages of the books
-			
-		
+		System.out.println("*****average number of pages of the books*****");
+			double averagePages=allBooks
+					.stream()
+					.collect(Collectors.averagingInt(book->book.getPages()));
+			System.out.println(averagePages);
 		// We want all the titles of the books
+		System.out.println("*****all the titles of the books in list*****");
+		List<String> allBookTitles=allBooks
+				.stream()
+				.map(book->book.getTitle())
+				.collect(toList());
+		allBookTitles.forEach(System.out::println);
 
 		//all tiles print : java , adv c#, 
-		
+		System.out.println("*****all the titles of the books in String*****");
+		String allBook=allBooks
+				.stream()
+				.map(book->book.getTitle())
+				.collect(Collectors.joining("\n"));
+		System.out.println(allBook);
 	
 		// We want the book with the higher number of authors?
-
-	
+		Optional<Book> bookWithHighestNoOfAuthor=
+				allBooks
+				.stream()
+				.collect(Collectors.maxBy(Comparator.comparing(book->book.getAuthors().size())));
+			System.out.println(bookWithHighestNoOfAuthor.get());
+		
 		// We want a Map of book per year.
-
+		Map<Integer,List<Book>> bookPerYear=
+				allBooks
+				.stream()
+				.collect(Collectors.groupingBy(Book::getYear));
+		System.out.println(bookPerYear);
 		// We want a Map of book per year and then by subject
+		Map<Integer,Map<Subject,List<Book>>> mapBookPerYear=
+				allBooks
+				.stream()
+				.collect(Collectors.groupingBy(Book::getYear,groupingBy(Book::getSubject)));
+		
+		
 		
 		// We want to count how many books are published per year.
-
+		Map<Integer,Long>bookCountPerYear=allBooks
+				.stream()
+				.collect(Collectors.groupingBy(book->book.getYear(),counting()));
+		System.out.println(bookCountPerYear);
 	
 
 	}

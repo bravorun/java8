@@ -3,6 +3,8 @@ package com.java8.casestudy.case2;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.*;
 
@@ -34,17 +36,33 @@ public class DishTesterExaple2 {
 		
 		// Get list of All Dishes only containing name and calValue
 		
-		// create a List by selecting the first three dishes that have more than 300 calories
 		
+		// create a List by selecting the first three dishes that have more than 300 calories
+		List <String> calloriesMore=allDishes
+		.stream()
+		.filter(food->food.getCalories()>300)
+		.map(food->food.getName())
+		.limit(3)
+		.collect(Collectors.toList());
+		calloriesMore.forEach(System.out::println);
 		
 		/*
 		 * allMatch, anyMatch,noneMatch, findFirst, findAny
 		 */
 
 		// find out whether the menu has a vegetarian option: anyMatch
+		Boolean vegetarianOption=allDishes
+				.stream()
+				.anyMatch(dish->dish.isVegetarian());
+		System.out.println(vegetarianOption);
 		
 		// find out whether the menu ishealthy :allMatch
 		// (ie. all dishes are below 1000 calories):
+		Boolean healthyFood=allDishes
+				.stream()
+				.allMatch(food->food.getCalories()<1000);
+		System.out.println("Is all Dishes are healthy : "+healthyFood);
+		
 		
 		// noneMatch: opposite of allMatch
 
@@ -55,6 +73,13 @@ public class DishTesterExaple2 {
 		// IntStream,DoubleStream, and LongStream==> avoide boxing cost
 
 		// get all the cal values of all food items
+		List <Integer> calValue=allDishes
+				.stream()
+				.map(food->food.getCalories())
+				.collect(Collectors.toList());
+		calValue.forEach(System.out::println);
+		
+		
 				
 		// using primitive stream
 		// find max cal values for all dishes, Optional
@@ -70,7 +95,11 @@ public class DishTesterExaple2 {
 		 */
 
 		// Dishes grouped by type
-		
+		Map<Object, List<Dish>> groupByType=
+				allDishes
+				.stream()
+				.collect(Collectors.groupingBy(dish->dish.getType()));
+		//groupByType.forEach(System.out::println);
 		// Dishes grouped by calorific level
 		/*
 		 * if (dish.getCalories() <= 400)
